@@ -1,0 +1,11 @@
+SMAP
+categoryproducts_jsp.java
+JSP
+*S JSP
+*F
++ 0 categoryproducts.jsp
+WEB-INF/view/categoryproducts.jsp
+*L
+5,9:65
+13:94,9
+*E

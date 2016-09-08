@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class dynamic-insert="true" dynamic-update="true" mutable="true" name="org.app.model.User" optimistic-lock="version" polymorphism="implicit" select-before-update="false"/>
+  <class dynamic-insert="true" dynamic-update="true" mutable="true" name="org.app.model.Product" optimistic-lock="version" polymorphism="implicit" select-before-update="false"/>
+  <class dynamic-insert="true" dynamic-update="true" mutable="true" name="org.app.model.Purchase" optimistic-lock="version" polymorphism="implicit" select-before-update="false"/>
+  <class dynamic-insert="true" dynamic-update="true" mutable="true" name="org.app.model.Cart" optimistic-lock="version" polymorphism="implicit" select-before-update="false"/>
+  <class dynamic-insert="true" dynamic-update="true" mutable="true" name="org.app.model.Category" optimistic-lock="version" polymorphism="implicit" select-before-update="false"/>
+</hibernate-mapping>

@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<beans:beans  xmlns="http://www.springframework.org/schema/security"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xmlns:p="http://www.springframework.org/schema/p"
+             xmlns:tx="http://www.springframework.org/schema/tx"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx 
+http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+http://www.springframework.org/schema/security
+http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+    <mvc:annotation-driven/>
+    <global-method-security secured-annotations="enabled" pre-post-annotations="enabled" />
+    <http>
+        <form-login login-page="/user/login"
+        login-processing-url="/j_spring_security_check"
+        default-target-url="/"
+        authentication-failure-url="/user/login?error=1"
+        username-parameter="name"
+        password-parameter="password" />
+        <logout logout-url="/j_spring_security_logout" logout-success-url="/" />
+        <csrf/>
+        <anonymous />
+        <intercept-url pattern="/" access="permitAll" />
+        <intercept-url pattern="/user/login" access="isAnonymous()" />
+        <intercept-url pattern="/user/register" access="isAnonymous()" />
+        <intercept-url pattern="/user/profile/**" access="permitAll" />
+        <intercept-url pattern="/category/all" access="permitAll" />
+        <intercept-url pattern="/category/details/**" access="permitAll" />
+        <intercept-url pattern="/product/details/**" access="permitAll" />
+        <intercept-url pattern="/cart/**" access="hasAuthority('customer')" />
+        <intercept-url pattern="/purchase/**" access="hasAuthority('customer')" />              
+        <intercept-url pattern="/purchases/process" access="hasAuthority('shopassistant')" />              
+        <intercept-url pattern="/purchases/new" access="hasAuthority('shopassistant')" />  
+        <intercept-url pattern="/category/add" access="hasAuthority('shopassistant')" />
+        <intercept-url pattern="/product/add" access="hasAuthority('shopassistant')" /> 
+        <intercept-url pattern="/product/edit" access="hasAuthority('shopassistant')" />      
+        <intercept-url pattern="/product/remove" access="hasAuthority('shopassistant')" />      
+        <intercept-url pattern="/product/addimage" access="hasAuthority('shopassistant')" />      
+        <intercept-url pattern="/product/addtocart/**" access="hasAuthority('customer')" />      
+   
+    </http>
+    <authentication-manager>
+        <authentication-provider>
+            <jdbc-user-service data-source-ref="dataSource"
+                users-by-username-query=
+                "SELECT nick, pword, 1 FROM person WHERE nick=?"
+                authorities-by-username-query=
+                "SELECT nick, rights FROM person WHERE nick =?  " />
+        </authentication-provider>
+    </authentication-manager>
+    <mvc:resources mapping="/WEB-INF/images/**" location="/WEB-INF/images/" />
+   <beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+                <beans:property name="maxUploadSize" value="104857600" />
+		<beans:property name="maxInMemorySize" value="4096" />
+       </beans:bean>
+    <beans:bean id="viewResolver"
+            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <beans:property name="viewClass"
+                    value="org.springframework.web.servlet.view.JstlView" />
+            <beans:property name="prefix" value="/WEB-INF/view/" />
+            <beans:property name="suffix" value=".jsp" />
+    </beans:bean>
+   
+ <beans:bean id="messageSource"
+        class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+ 
+        <beans:property name="basename" value="/WEB-INF/messages" />
+ 
+    </beans:bean>
+<beans:bean id="dataSource"
+    class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+    p:driverClassName="com.mysql.jdbc.Driver"
+    p:url="jdbc:mysql://localhost:3306/my_shopdb?characterEncoding=UTF-8"
+    p:username="root"
+    p:password="" />
+
+    <!-- ADD PERSISTENCE SUPPORT HERE (jpa, hibernate, etc) -->
+    <beans:bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <beans:property name="dataSource" ref="dataSource" />
+        <beans:property name="packagesToScan" value="org.app.model" /> 
+        
+        <beans:property name="hibernateProperties">
+            <beans:props>
+                <beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</beans:prop>
+                <beans:prop key="hibernate.show_sql">true</beans:prop> 
+                <beans:prop key="hibernate.charSet">UTF-8</beans:prop> 
+               <!-- <beans:prop key="hibernate.hbm2ddl.auto">create</beans:prop>-->
+            </beans:props>
+        </beans:property>
+        <beans:property name="annotatedClasses">
+            <beans:list>
+                <beans:value>org.app.model.Purchase</beans:value>
+                <beans:value>org.app.model.Cart</beans:value>
+                <beans:value>org.app.model.Person</beans:value>
+                <beans:value>org.app.model.Product</beans:value>   
+                <beans:value>org.app.model.Category</beans:value> 
+                <beans:value>org.app.model.ProductInCart</beans:value>               
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+    <beans:bean id="CartDao" class="org.app.dao.impl.CartDaoImpl">
+        <beans:property name="sessionFactory" ref="sessionFactory" />
+    </beans:bean>
+    <beans:bean id="CartService" class="org.app.service.impl.CartServiceImpl">
+        <beans:property name="CartDao" ref="CartDao"></beans:property>
+    </beans:bean>
+    <beans:bean id="CategoryDao" class="org.app.dao.impl.CategoryDaoImpl">
+        <beans:property name="sessionFactory" ref="sessionFactory" />
+    </beans:bean>
+    <beans:bean id="CategoryService" class="org.app.service.impl.CategoryServiceImpl">
+        <beans:property name="CategoryDao" ref="CategoryDao"></beans:property>
+    </beans:bean>
+    <beans:bean id="UserDao" class="org.app.dao.impl.UserDaoImpl">
+        <beans:property name="sessionFactory" ref="sessionFactory" />
+    </beans:bean>
+    <beans:bean id="UserService" class="org.app.service.impl.UserServiceImpl">
+        <beans:property name="UserDao" ref="UserDao"></beans:property>
+    </beans:bean>
+    <beans:bean id="PurchaseDao" class="org.app.dao.impl.PurchaseDaoImpl">
+        <beans:property name="sessionFactory" ref="sessionFactory" />
+    </beans:bean>
+    <beans:bean id="PurchaseService" class="org.app.service.impl.PurchaseServiceImpl">
+        <beans:property name="PurchaseDao" ref="PurchaseDao"></beans:property>
+    </beans:bean>
+    <beans:bean id="ProductDao" class="org.app.dao.impl.ProductDaoImpl">
+        <beans:property name="sessionFactory" ref="sessionFactory" />
+    </beans:bean>
+    <beans:bean id="ProductService" class="org.app.service.impl.ProductServiceImpl">
+        <beans:property name="ProductDao" ref="ProductDao"></beans:property>
+    </beans:bean>
+    <beans:bean id="PurchaseController" class="org.app.controller.PurchaseController" p:purchaseService-ref="PurchaseService" p:cartService-ref="CartService" p:userService-ref="UserService"/>   
+    <beans:bean id="UserController" class="org.app.controller.UserController" p:userService-ref="UserService" p:cartService-ref="CartService"/>
+    <beans:bean id="ProductController" class="org.app.controller.ProductController" p:productService-ref="ProductService" p:categoryService-ref="CategoryService" p:userService-ref="UserService" p:cartService-ref="CartService"/>
+    <beans:bean id="CategoryController" class="org.app.controller.CategoryController" p:categoryService-ref="CategoryService"/>
+    
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <beans:bean id="transactionManager"
+      class="org.springframework.orm.hibernate4.HibernateTransactionManager" 
+p:sessionFactory-ref="sessionFactory">
+    </beans:bean>
+
+</beans:beans>

@@ -1,0 +1,11 @@
+SMAP
+confirmdelete_jsp.java
+JSP
+*S JSP
+*F
++ 0 confirmdelete.jsp
+WEB-INF/view/confirmdelete.jsp
+*L
+5,9:68
+13:97,9
+*E

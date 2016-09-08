@@ -1,0 +1,11 @@
+SMAP
+productdetails_jsp.java
+JSP
+*S JSP
+*F
++ 0 productdetails.jsp
+WEB-INF/view/productdetails.jsp
+*L
+5,9:86
+13:115,9
+*E

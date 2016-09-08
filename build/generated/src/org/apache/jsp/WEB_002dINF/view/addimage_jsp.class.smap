@@ -1,0 +1,12 @@
+SMAP
+addimage_jsp.java
+JSP
+*S JSP
+*F
++ 0 addimage.jsp
+WEB-INF/view/addimage.jsp
+*L
+5,9:62
+13:92,9
+33:72
+*E

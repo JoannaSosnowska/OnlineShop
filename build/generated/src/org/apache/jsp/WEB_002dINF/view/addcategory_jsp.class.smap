@@ -1,0 +1,12 @@
+SMAP
+addcategory_jsp.java
+JSP
+*S JSP
+*F
++ 0 addcategory.jsp
+WEB-INF/view/addcategory.jsp
+*L
+5,10:72
+14:81,9
+32:90
+*E

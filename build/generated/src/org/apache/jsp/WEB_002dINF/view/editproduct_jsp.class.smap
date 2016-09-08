@@ -1,0 +1,11 @@
+SMAP
+editproduct_jsp.java
+JSP
+*S JSP
+*F
++ 0 editproduct.jsp
+WEB-INF/view/editproduct.jsp
+*L
+5,9:86
+13:94,9
+*E

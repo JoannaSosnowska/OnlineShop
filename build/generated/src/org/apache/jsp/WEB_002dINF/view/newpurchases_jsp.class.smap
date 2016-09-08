@@ -1,0 +1,12 @@
+SMAP
+newpurchases_jsp.java
+JSP
+*S JSP
+*F
++ 0 newpurchases.jsp
+WEB-INF/view/newpurchases.jsp
+*L
+5,9:65
+13:95,9
+85:75
+*E
